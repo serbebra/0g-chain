@@ -33,8 +33,8 @@ set -e
 IFS=","; declare -a IPS=($1); unset IFS
 
 NUM_NODES=${#IPS[@]}
-BALANCE=$((100000000/$NUM_NODES))kava
-STAKING=$((50000000/$NUM_NODES))kava
+BALANCE=$((2000000000/$NUM_NODES))ukava
+STAKING=$((1000000000/$NUM_NODES))ukava
 
 # Init configs
 for ((i=0; i<$NUM_NODES; i++)) do
@@ -87,7 +87,7 @@ for ((i=0; i<$NUM_NODES; i++)) do
 
 	# Change app.toml
 	APP_TOML="$HOMEDIR"/config/app.toml
-	sed -i 's/minimum-gas-prices = "0akava"/minimum-gas-prices = "1000000000ukava"/' "$APP_TOML"
+	sed -i 's/minimum-gas-prices = "0akava"/minimum-gas-prices = "1000000000akava"/' "$APP_TOML"
 	sed -i '/\[json-rpc\]/,/^\[/ s/enable = false/enable = true/' "$APP_TOML"
 	sed -i '/\[json-rpc\]/,/^\[/ s/address = "127.0.0.1:8545"/address = "0.0.0.0:8545"/' "$APP_TOML"
 
@@ -128,13 +128,13 @@ if [[ "$OS_NAME" = "Msys" ]]; then
 		set -e
 		if [[ "$ret" = "" ]]; then
 			echo "Create validator key: $VALIDATOR"
-			kava keys add $VALIDATOR --keyring-backend os
+			kava keys add $VALIDATOR --keyring-backend os --eth
 		fi
 	done
 elif [[ "$OS_NAME" = "GNU/Linux" ]]; then
 	# Create N validators for node0
 	for ((i=0; i<$NUM_NODES; i++)) do
-		yes $PASSWORD | kava keys add "0gchain_9000_validator_$i" --keyring-backend os --home "$ROOT_DIR"/node0
+		yes $PASSWORD | kava keys add "0gchain_9000_validator_$i" --keyring-backend os --home "$ROOT_DIR"/node0 --eth
 	done
 
 	# Copy validators to other nodes
@@ -153,9 +153,9 @@ fi
 for ((i=0; i<$NUM_NODES; i++)) do
 	for ((j=0; j<$NUM_NODES; j++)) do
 		if [[ "$OS_NAME" = "GNU/Linux" ]]; then
-			yes $PASSWORD | kava add-genesis-account "0gchain_9000_validator_$i" $BALANCE --home "$ROOT_DIR/node$j"
+			yes $PASSWORD | kava add-genesis-account "0gchain_9000_validator_$j" $BALANCE --home "$ROOT_DIR/node$i"
 		else
-			kava add-genesis-account "0gchain_9000_validator_$i" $BALANCE --home "$ROOT_DIR/node$j"
+			kava add-genesis-account "0gchain_9000_validator_$j" $BALANCE --home "$ROOT_DIR/node$i"
 		fi 
 	done
 done
