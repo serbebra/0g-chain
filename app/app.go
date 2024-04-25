@@ -90,12 +90,13 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 	solomachine "github.com/cosmos/ibc-go/v7/modules/light-clients/06-solomachine"
 	ibctm "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/vm"
 	evmante "github.com/evmos/ethermint/app/ante"
 	ethermintconfig "github.com/evmos/ethermint/server/config"
 	"github.com/evmos/ethermint/x/evm"
 	evmkeeper "github.com/evmos/ethermint/x/evm/keeper"
 	evmtypes "github.com/evmos/ethermint/x/evm/types"
-	"github.com/evmos/ethermint/x/evm/vm/geth"
 	"github.com/evmos/ethermint/x/feemarket"
 	feemarketkeeper "github.com/evmos/ethermint/x/feemarket/keeper"
 	feemarkettypes "github.com/evmos/ethermint/x/feemarket/types"
@@ -103,6 +104,7 @@ import (
 	"github.com/0glabs/0g-chain/app/ante"
 	chainparams "github.com/0glabs/0g-chain/app/params"
 	"github.com/0glabs/0g-chain/chaincfg"
+	"github.com/0glabs/0g-chain/precompiles/dasigners"
 
 	evmutil "github.com/0glabs/0g-chain/x/evmutil"
 	evmutilkeeper "github.com/0glabs/0g-chain/x/evmutil/keeper"
@@ -435,15 +437,23 @@ func NewApp(
 	)
 
 	evmBankKeeper := evmutilkeeper.NewEvmBankKeeper(app.evmutilKeeper, app.bankKeeper, app.accountKeeper)
+	// precopmiles
+	precompiles := make(map[common.Address]vm.PrecompiledContract)
+	daSignersPrecompile, err := dasigners.NewDASignersPrecompile()
+	if err != nil {
+		panic("initialize precompile failed")
+	}
+	precompiles[daSignersPrecompile.Address()] = daSignersPrecompile
+	// evm keeper
 	app.evmKeeper = evmkeeper.NewKeeper(
 		appCodec, keys[evmtypes.StoreKey], tkeys[evmtypes.TransientKey],
 		govAuthAddr,
 		app.accountKeeper, evmBankKeeper, app.stakingKeeper, app.feeMarketKeeper,
-		nil, // precompiled contracts
-		geth.NewEVM,
 		options.EVMTrace,
 		evmSubspace,
+		precompiles,
 	)
+	fmt.Println(app.evmKeeper.GetPrecompiles())
 
 	app.evmutilKeeper.SetEvmKeeper(app.evmKeeper)
 

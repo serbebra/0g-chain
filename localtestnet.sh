@@ -20,11 +20,11 @@ relayerMnemonic="never reject sniff east arctic funny twin feed upper series sta
 # 0xa2F728F997f62F47D4262a70947F6c36885dF9fa
 # kava15tmj37vh7ch504px9fcfglmvx6y9m70646ev8t
 
-DATA=~/.kava
+DATA=~/.0gchain
 # remove any old state and config
 rm -rf $DATA
 
-BINARY=kava
+BINARY=~/go/bin/cmd
 
 # Create new data directory, overwriting any that alread existed
 chainID="zgchain_8888-1"
@@ -49,36 +49,36 @@ $BINARY config keyring-backend test
 # Create validator keys and add account to genesis
 validatorKeyName="validator"
 printf "$validatorMnemonic\n" | $BINARY keys add $validatorKeyName --recover
-$BINARY add-genesis-account $validatorKeyName 2000000000ukava
+$BINARY add-genesis-account $validatorKeyName 2000000000a0gi
 
 # Create faucet keys and add account to genesis
 faucetKeyName="faucet"
 printf "$faucetMnemonic\n" | $BINARY keys add $faucetKeyName --recover
-$BINARY add-genesis-account $faucetKeyName 1000000000ukava
+$BINARY add-genesis-account $faucetKeyName 1000000000a0gi
 
 evmFaucetKeyName="evm-faucet"
 printf "$evmFaucetMnemonic\n" | $BINARY keys add $evmFaucetKeyName --eth --recover
-$BINARY add-genesis-account $evmFaucetKeyName 1000000000ukava
+$BINARY add-genesis-account $evmFaucetKeyName 1000000000a0gi
 
 userKeyName="user"
 printf "$userMnemonic\n" | $BINARY keys add $userKeyName --eth --recover
-$BINARY add-genesis-account $userKeyName 1000000000ukava,1000000000usdx
+$BINARY add-genesis-account $userKeyName 1000000000a0gi,1000000000usdx
 
 relayerKeyName="relayer"
 printf "$relayerMnemonic\n" | $BINARY keys add $relayerKeyName --eth --recover
-$BINARY add-genesis-account $relayerKeyName 1000000000ukava
+$BINARY add-genesis-account $relayerKeyName 1000000000a0gi
 
-storageContractAcc="kava1l0j9dqdvd3fatfqywhm4y6avrln4jracrfy9hk"
-$BINARY add-genesis-account $storageContractAcc 1000000000ukava
+# storageContractAcc="kava1l0j9dqdvd3fatfqywhm4y6avrln4jracrfy9hk"
+# $BINARY add-genesis-account $storageContractAcc 1000000000a0gi
 
 # Create a delegation tx for the validator and add to genesis
-$BINARY gentx $validatorKeyName 1000000000ukava --keyring-backend test --chain-id $chainID
+$BINARY gentx $validatorKeyName 1000000000a0gi --keyring-backend test --chain-id $chainID
 $BINARY collect-gentxs
 
-# Replace stake with ukava
-sed -in-place='' 's/stake/ukava/g' $DATA/config/genesis.json
+# Replace stake with a0gi
+sed -in-place='' 's/stake/a0gi/g' $DATA/config/genesis.json
 
-# Replace the default evm denom of aphoton with ukava
+# Replace the default evm denom of aphoton with a0gi
 sed -in-place='' 's/aphoton/akava/g' $DATA/config/genesis.json
 
 GENESIS=$DATA/config/genesis.json
