@@ -1,0 +1,24 @@
+syntax = "proto3";
+package zgc.dasigners.v1;
+
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/0glabs/0g-chain/x/dasigners/v1/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Query defines the gRPC querier service for the dasigners module
+service Query {
+  rpc EpochNumber(QueryEpochNumberRequest) returns (QueryEpochNumberResponse) {
+    option (google.api.http).get = "/0gchain/dasigners/v1/epoch-number";
+  }
+}
+
+message QueryEpochNumberRequest {}
+
+message QueryEpochNumberResponse {
+  uint64 epoch_number = 1;
+}

@@ -104,7 +104,7 @@ import (
 	"github.com/0glabs/0g-chain/app/ante"
 	chainparams "github.com/0glabs/0g-chain/app/params"
 	"github.com/0glabs/0g-chain/chaincfg"
-	"github.com/0glabs/0g-chain/precompiles/dasigners"
+	dasignersprecompile "github.com/0glabs/0g-chain/precompiles/dasigners"
 
 	"github.com/0glabs/0g-chain/x/bep3"
 	bep3keeper "github.com/0glabs/0g-chain/x/bep3/keeper"
@@ -123,6 +123,9 @@ import (
 	das "github.com/0glabs/0g-chain/x/das/v1"
 	daskeeper "github.com/0glabs/0g-chain/x/das/v1/keeper"
 	dastypes "github.com/0glabs/0g-chain/x/das/v1/types"
+	dasigners "github.com/0glabs/0g-chain/x/dasigners/v1"
+	dasignerskeeper "github.com/0glabs/0g-chain/x/dasigners/v1/keeper"
+	dasignerstypes "github.com/0glabs/0g-chain/x/dasigners/v1/types"
 	issuance "github.com/0glabs/0g-chain/x/issuance"
 	issuancekeeper "github.com/0glabs/0g-chain/x/issuance/keeper"
 	issuancetypes "github.com/0glabs/0g-chain/x/issuance/types"
@@ -176,6 +179,7 @@ var (
 		committee.AppModuleBasic{},
 		council.AppModuleBasic{},
 		das.AppModuleBasic{},
+		dasigners.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -260,6 +264,7 @@ type App struct {
 	bep3Keeper            bep3keeper.Keeper
 	pricefeedKeeper       pricefeedkeeper.Keeper
 	committeeKeeper       committeekeeper.Keeper
+	dasignersKeeper       dasignerskeeper.Keeper
 
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
@@ -468,9 +473,11 @@ func NewApp(
 	)
 
 	evmBankKeeper := evmutilkeeper.NewEvmBankKeeper(app.evmutilKeeper, app.bankKeeper, app.accountKeeper)
+	// dasigners keeper
+	app.dasignersKeeper = dasignerskeeper.NewKeeper(keys[dasignerstypes.StoreKey], appCodec)
 	// precopmiles
 	precompiles := make(map[common.Address]vm.PrecompiledContract)
-	daSignersPrecompile, err := dasigners.NewDASignersPrecompile()
+	daSignersPrecompile, err := dasignersprecompile.NewDASignersPrecompile(app.dasignersKeeper)
 	if err != nil {
 		panic("initialize precompile failed")
 	}
@@ -640,6 +647,7 @@ func NewApp(
 		mint.NewAppModule(appCodec, app.mintKeeper, app.accountKeeper, nil, mintSubspace),
 		council.NewAppModule(app.CouncilKeeper, app.stakingKeeper),
 		das.NewAppModule(app.DasKeeper),
+		dasigners.NewAppModule(app.dasignersKeeper),
 	)
 
 	// Warning: Some begin blockers must run before others. Ensure the dependencies are understood before modifying this list.
@@ -682,6 +690,7 @@ func NewApp(
 
 		counciltypes.ModuleName,
 		dastypes.ModuleName,
+		dasignerstypes.ModuleName,
 	)
 
 	// Warning: Some end blockers must run before others. Ensure the dependencies are understood before modifying this list.
@@ -717,6 +726,7 @@ func NewApp(
 		packetforwardtypes.ModuleName,
 		counciltypes.ModuleName,
 		dastypes.ModuleName,
+		dasignerstypes.ModuleName,
 	)
 
 	// Warning: Some init genesis methods must run before others. Ensure the dependencies are understood before modifying this list
@@ -751,6 +761,7 @@ func NewApp(
 		crisistypes.ModuleName, // runs the invariants at genesis, should run after other modules
 		counciltypes.ModuleName,
 		dastypes.ModuleName,
+		dasignerstypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.crisisKeeper)

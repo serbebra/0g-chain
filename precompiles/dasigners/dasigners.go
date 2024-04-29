@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	precopmiles_common "github.com/0glabs/0g-chain/precompiles/common"
+	dasignerskeeper "github.com/0glabs/0g-chain/x/dasigners/v1/keeper"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/vm"
@@ -22,16 +23,18 @@ const (
 var _ vm.PrecompiledContract = &DASignersPrecompile{}
 
 type DASignersPrecompile struct {
-	abi abi.ABI
+	abi             abi.ABI
+	dasignersKeeper dasignerskeeper.Keeper
 }
 
-func NewDASignersPrecompile() (*DASignersPrecompile, error) {
+func NewDASignersPrecompile(dasignersKeeper dasignerskeeper.Keeper) (*DASignersPrecompile, error) {
 	abi, err := abi.JSON(strings.NewReader(DASignersABI))
 	if err != nil {
 		return nil, err
 	}
 	return &DASignersPrecompile{
-		abi: abi,
+		abi:             abi,
+		dasignersKeeper: dasignersKeeper,
 	}, nil
 }
 
@@ -72,7 +75,11 @@ func (d *DASignersPrecompile) Run(evm *vm.EVM, contract *vm.Contract, readonly b
 	var res []byte
 	switch method.Name {
 	case DASignersFunctionEpochNumber:
-		res, err = method.Outputs.Pack(big.NewInt(10))
+		epochNumber, err := d.dasignersKeeper.GetEpochNumber(ctx)
+		if err != nil {
+			return nil, err
+		}
+		res, err = method.Outputs.Pack(big.NewInt(int64(epochNumber)))
 		if err != nil {
 			return nil, err
 		}
