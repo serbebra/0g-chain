@@ -68,81 +68,6 @@
     "type": "event"
   },
   {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "X",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "Y",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct BN254.G1Point",
-        "name": "_hash",
-        "type": "tuple"
-      },
-      {
-        "internalType": "uint256",
-        "name": "epoch",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "signerBitmap",
-        "type": "bytes"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256[2]",
-            "name": "X",
-            "type": "uint256[2]"
-          },
-          {
-            "internalType": "uint256[2]",
-            "name": "Y",
-            "type": "uint256[2]"
-          }
-        ],
-        "internalType": "struct BN254.G2Point",
-        "name": "_aggPkG2",
-        "type": "tuple"
-      },
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "X",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "Y",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct BN254.G1Point",
-        "name": "_signature",
-        "type": "tuple"
-      }
-    ],
-    "name": "checkSignatures",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "epochNumber",
     "outputs": [
@@ -161,17 +86,53 @@
         "internalType": "uint256",
         "name": "epoch",
         "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "signersBitmap",
+        "type": "bytes"
+      }
+    ],
+    "name": "getAggPkG1",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "X",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Y",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct BN254.G1Point",
+        "name": "aggPkG1",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "epoch",
+        "type": "uint256"
       }
     ],
     "name": "getSigners",
     "outputs": [
       {
-        "internalType": "address[]",
-        "name": "accounts",
-        "type": "address[]"
-      },
-      {
         "components": [
+          {
+            "internalType": "address",
+            "name": "signer",
+            "type": "address"
+          },
           {
             "internalType": "string",
             "name": "socket",
@@ -224,6 +185,36 @@
     "inputs": [
       {
         "components": [
+          {
+            "internalType": "uint256",
+            "name": "X",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "Y",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct BN254.G1Point",
+        "name": "_signature",
+        "type": "tuple"
+      }
+    ],
+    "name": "registerNextEpoch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "signer",
+            "type": "address"
+          },
           {
             "internalType": "string",
             "name": "socket",
@@ -287,6 +278,19 @@
       }
     ],
     "name": "registerSigner",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "socket",
+        "type": "string"
+      }
+    ],
+    "name": "updateSocket",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

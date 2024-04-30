@@ -42,6 +42,7 @@ type BN254G2Point struct {
 
 // IDASignersSignerDetail is an auto generated low-level Go binding around an user-defined struct.
 type IDASignersSignerDetail struct {
+	Signer common.Address
 	Socket string
 	PkG1   BN254G1Point
 	PkG2   BN254G2Point
@@ -49,7 +50,7 @@ type IDASignersSignerDetail struct {
 
 // DASignersMetaData contains all meta data concerning the DASigners contract.
 var DASignersMetaData = &bind.MetaData{
-	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"indexed\":false,\"internalType\":\"structBN254.G1Point\",\"name\":\"pkG1\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"indexed\":false,\"internalType\":\"structBN254.G2Point\",\"name\":\"pkG2\",\"type\":\"tuple\"}],\"name\":\"NewSigner\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"socket\",\"type\":\"string\"}],\"name\":\"SocketUpdated\",\"type\":\"event\"},{\"inputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"_hash\",\"type\":\"tuple\"},{\"internalType\":\"uint256\",\"name\":\"epoch\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signerBitmap\",\"type\":\"bytes\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"internalType\":\"structBN254.G2Point\",\"name\":\"_aggPkG2\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"_signature\",\"type\":\"tuple\"}],\"name\":\"checkSignatures\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"epochNumber\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"epoch\",\"type\":\"uint256\"}],\"name\":\"getSigners\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"accounts\",\"type\":\"address[]\"},{\"components\":[{\"internalType\":\"string\",\"name\":\"socket\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"pkG1\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"internalType\":\"structBN254.G2Point\",\"name\":\"pkG2\",\"type\":\"tuple\"}],\"internalType\":\"structIDASigners.SignerDetail[]\",\"name\":\"details\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"socket\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"pkG1\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"internalType\":\"structBN254.G2Point\",\"name\":\"pkG2\",\"type\":\"tuple\"}],\"internalType\":\"structIDASigners.SignerDetail\",\"name\":\"_signer\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"_signature\",\"type\":\"tuple\"}],\"name\":\"registerSigner\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
+	ABI: "[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"indexed\":false,\"internalType\":\"structBN254.G1Point\",\"name\":\"pkG1\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"indexed\":false,\"internalType\":\"structBN254.G2Point\",\"name\":\"pkG2\",\"type\":\"tuple\"}],\"name\":\"NewSigner\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"socket\",\"type\":\"string\"}],\"name\":\"SocketUpdated\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"epochNumber\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"epoch\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"signersBitmap\",\"type\":\"bytes\"}],\"name\":\"getAggPkG1\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"aggPkG1\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"epoch\",\"type\":\"uint256\"}],\"name\":\"getSigners\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"socket\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"pkG1\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"internalType\":\"structBN254.G2Point\",\"name\":\"pkG2\",\"type\":\"tuple\"}],\"internalType\":\"structIDASigners.SignerDetail[]\",\"name\":\"details\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"_signature\",\"type\":\"tuple\"}],\"name\":\"registerNextEpoch\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"socket\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"pkG1\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256[2]\",\"name\":\"X\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"Y\",\"type\":\"uint256[2]\"}],\"internalType\":\"structBN254.G2Point\",\"name\":\"pkG2\",\"type\":\"tuple\"}],\"internalType\":\"structIDASigners.SignerDetail\",\"name\":\"_signer\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"X\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"Y\",\"type\":\"uint256\"}],\"internalType\":\"structBN254.G1Point\",\"name\":\"_signature\",\"type\":\"tuple\"}],\"name\":\"registerSigner\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"socket\",\"type\":\"string\"}],\"name\":\"updateSocket\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 }
 
 // DASignersABI is the input ABI used to generate the binding from.
@@ -198,37 +199,6 @@ func (_DASigners *DASignersTransactorRaw) Transact(opts *bind.TransactOpts, meth
 	return _DASigners.Contract.contract.Transact(opts, method, params...)
 }
 
-// CheckSignatures is a free data retrieval call binding the contract method 0xcdcd4ea7.
-//
-// Solidity: function checkSignatures((uint256,uint256) _hash, uint256 epoch, bytes signerBitmap, (uint256[2],uint256[2]) _aggPkG2, (uint256,uint256) _signature) view returns(bool)
-func (_DASigners *DASignersCaller) CheckSignatures(opts *bind.CallOpts, _hash BN254G1Point, epoch *big.Int, signerBitmap []byte, _aggPkG2 BN254G2Point, _signature BN254G1Point) (bool, error) {
-	var out []interface{}
-	err := _DASigners.contract.Call(opts, &out, "checkSignatures", _hash, epoch, signerBitmap, _aggPkG2, _signature)
-
-	if err != nil {
-		return *new(bool), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
-
-	return out0, err
-
-}
-
-// CheckSignatures is a free data retrieval call binding the contract method 0xcdcd4ea7.
-//
-// Solidity: function checkSignatures((uint256,uint256) _hash, uint256 epoch, bytes signerBitmap, (uint256[2],uint256[2]) _aggPkG2, (uint256,uint256) _signature) view returns(bool)
-func (_DASigners *DASignersSession) CheckSignatures(_hash BN254G1Point, epoch *big.Int, signerBitmap []byte, _aggPkG2 BN254G2Point, _signature BN254G1Point) (bool, error) {
-	return _DASigners.Contract.CheckSignatures(&_DASigners.CallOpts, _hash, epoch, signerBitmap, _aggPkG2, _signature)
-}
-
-// CheckSignatures is a free data retrieval call binding the contract method 0xcdcd4ea7.
-//
-// Solidity: function checkSignatures((uint256,uint256) _hash, uint256 epoch, bytes signerBitmap, (uint256[2],uint256[2]) _aggPkG2, (uint256,uint256) _signature) view returns(bool)
-func (_DASigners *DASignersCallerSession) CheckSignatures(_hash BN254G1Point, epoch *big.Int, signerBitmap []byte, _aggPkG2 BN254G2Point, _signature BN254G1Point) (bool, error) {
-	return _DASigners.Contract.CheckSignatures(&_DASigners.CallOpts, _hash, epoch, signerBitmap, _aggPkG2, _signature)
-}
-
 // EpochNumber is a free data retrieval call binding the contract method 0xf4145a83.
 //
 // Solidity: function epochNumber() view returns(uint256)
@@ -260,70 +230,129 @@ func (_DASigners *DASignersCallerSession) EpochNumber() (*big.Int, error) {
 	return _DASigners.Contract.EpochNumber(&_DASigners.CallOpts)
 }
 
+// GetAggPkG1 is a free data retrieval call binding the contract method 0x86fafce5.
+//
+// Solidity: function getAggPkG1(uint256 epoch, bytes signersBitmap) view returns((uint256,uint256) aggPkG1)
+func (_DASigners *DASignersCaller) GetAggPkG1(opts *bind.CallOpts, epoch *big.Int, signersBitmap []byte) (BN254G1Point, error) {
+	var out []interface{}
+	err := _DASigners.contract.Call(opts, &out, "getAggPkG1", epoch, signersBitmap)
+
+	if err != nil {
+		return *new(BN254G1Point), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(BN254G1Point)).(*BN254G1Point)
+
+	return out0, err
+
+}
+
+// GetAggPkG1 is a free data retrieval call binding the contract method 0x86fafce5.
+//
+// Solidity: function getAggPkG1(uint256 epoch, bytes signersBitmap) view returns((uint256,uint256) aggPkG1)
+func (_DASigners *DASignersSession) GetAggPkG1(epoch *big.Int, signersBitmap []byte) (BN254G1Point, error) {
+	return _DASigners.Contract.GetAggPkG1(&_DASigners.CallOpts, epoch, signersBitmap)
+}
+
+// GetAggPkG1 is a free data retrieval call binding the contract method 0x86fafce5.
+//
+// Solidity: function getAggPkG1(uint256 epoch, bytes signersBitmap) view returns((uint256,uint256) aggPkG1)
+func (_DASigners *DASignersCallerSession) GetAggPkG1(epoch *big.Int, signersBitmap []byte) (BN254G1Point, error) {
+	return _DASigners.Contract.GetAggPkG1(&_DASigners.CallOpts, epoch, signersBitmap)
+}
+
 // GetSigners is a free data retrieval call binding the contract method 0xdfceceae.
 //
-// Solidity: function getSigners(uint256 epoch) view returns(address[] accounts, (string,(uint256,uint256),(uint256[2],uint256[2]))[] details)
-func (_DASigners *DASignersCaller) GetSigners(opts *bind.CallOpts, epoch *big.Int) (struct {
-	Accounts []common.Address
-	Details  []IDASignersSignerDetail
-}, error) {
+// Solidity: function getSigners(uint256 epoch) view returns((address,string,(uint256,uint256),(uint256[2],uint256[2]))[] details)
+func (_DASigners *DASignersCaller) GetSigners(opts *bind.CallOpts, epoch *big.Int) ([]IDASignersSignerDetail, error) {
 	var out []interface{}
 	err := _DASigners.contract.Call(opts, &out, "getSigners", epoch)
 
-	outstruct := new(struct {
-		Accounts []common.Address
-		Details  []IDASignersSignerDetail
-	})
 	if err != nil {
-		return *outstruct, err
+		return *new([]IDASignersSignerDetail), err
 	}
 
-	outstruct.Accounts = *abi.ConvertType(out[0], new([]common.Address)).(*[]common.Address)
-	outstruct.Details = *abi.ConvertType(out[1], new([]IDASignersSignerDetail)).(*[]IDASignersSignerDetail)
+	out0 := *abi.ConvertType(out[0], new([]IDASignersSignerDetail)).(*[]IDASignersSignerDetail)
 
-	return *outstruct, err
+	return out0, err
 
 }
 
 // GetSigners is a free data retrieval call binding the contract method 0xdfceceae.
 //
-// Solidity: function getSigners(uint256 epoch) view returns(address[] accounts, (string,(uint256,uint256),(uint256[2],uint256[2]))[] details)
-func (_DASigners *DASignersSession) GetSigners(epoch *big.Int) (struct {
-	Accounts []common.Address
-	Details  []IDASignersSignerDetail
-}, error) {
+// Solidity: function getSigners(uint256 epoch) view returns((address,string,(uint256,uint256),(uint256[2],uint256[2]))[] details)
+func (_DASigners *DASignersSession) GetSigners(epoch *big.Int) ([]IDASignersSignerDetail, error) {
 	return _DASigners.Contract.GetSigners(&_DASigners.CallOpts, epoch)
 }
 
 // GetSigners is a free data retrieval call binding the contract method 0xdfceceae.
 //
-// Solidity: function getSigners(uint256 epoch) view returns(address[] accounts, (string,(uint256,uint256),(uint256[2],uint256[2]))[] details)
-func (_DASigners *DASignersCallerSession) GetSigners(epoch *big.Int) (struct {
-	Accounts []common.Address
-	Details  []IDASignersSignerDetail
-}, error) {
+// Solidity: function getSigners(uint256 epoch) view returns((address,string,(uint256,uint256),(uint256[2],uint256[2]))[] details)
+func (_DASigners *DASignersCallerSession) GetSigners(epoch *big.Int) ([]IDASignersSignerDetail, error) {
 	return _DASigners.Contract.GetSigners(&_DASigners.CallOpts, epoch)
 }
 
-// RegisterSigner is a paid mutator transaction binding the contract method 0xc00912d1.
+// RegisterNextEpoch is a paid mutator transaction binding the contract method 0x56a32372.
 //
-// Solidity: function registerSigner((string,(uint256,uint256),(uint256[2],uint256[2])) _signer, (uint256,uint256) _signature) returns()
+// Solidity: function registerNextEpoch((uint256,uint256) _signature) returns()
+func (_DASigners *DASignersTransactor) RegisterNextEpoch(opts *bind.TransactOpts, _signature BN254G1Point) (*types.Transaction, error) {
+	return _DASigners.contract.Transact(opts, "registerNextEpoch", _signature)
+}
+
+// RegisterNextEpoch is a paid mutator transaction binding the contract method 0x56a32372.
+//
+// Solidity: function registerNextEpoch((uint256,uint256) _signature) returns()
+func (_DASigners *DASignersSession) RegisterNextEpoch(_signature BN254G1Point) (*types.Transaction, error) {
+	return _DASigners.Contract.RegisterNextEpoch(&_DASigners.TransactOpts, _signature)
+}
+
+// RegisterNextEpoch is a paid mutator transaction binding the contract method 0x56a32372.
+//
+// Solidity: function registerNextEpoch((uint256,uint256) _signature) returns()
+func (_DASigners *DASignersTransactorSession) RegisterNextEpoch(_signature BN254G1Point) (*types.Transaction, error) {
+	return _DASigners.Contract.RegisterNextEpoch(&_DASigners.TransactOpts, _signature)
+}
+
+// RegisterSigner is a paid mutator transaction binding the contract method 0x7ca4dd5e.
+//
+// Solidity: function registerSigner((address,string,(uint256,uint256),(uint256[2],uint256[2])) _signer, (uint256,uint256) _signature) returns()
 func (_DASigners *DASignersTransactor) RegisterSigner(opts *bind.TransactOpts, _signer IDASignersSignerDetail, _signature BN254G1Point) (*types.Transaction, error) {
 	return _DASigners.contract.Transact(opts, "registerSigner", _signer, _signature)
 }
 
-// RegisterSigner is a paid mutator transaction binding the contract method 0xc00912d1.
+// RegisterSigner is a paid mutator transaction binding the contract method 0x7ca4dd5e.
 //
-// Solidity: function registerSigner((string,(uint256,uint256),(uint256[2],uint256[2])) _signer, (uint256,uint256) _signature) returns()
+// Solidity: function registerSigner((address,string,(uint256,uint256),(uint256[2],uint256[2])) _signer, (uint256,uint256) _signature) returns()
 func (_DASigners *DASignersSession) RegisterSigner(_signer IDASignersSignerDetail, _signature BN254G1Point) (*types.Transaction, error) {
 	return _DASigners.Contract.RegisterSigner(&_DASigners.TransactOpts, _signer, _signature)
 }
 
-// RegisterSigner is a paid mutator transaction binding the contract method 0xc00912d1.
+// RegisterSigner is a paid mutator transaction binding the contract method 0x7ca4dd5e.
 //
-// Solidity: function registerSigner((string,(uint256,uint256),(uint256[2],uint256[2])) _signer, (uint256,uint256) _signature) returns()
+// Solidity: function registerSigner((address,string,(uint256,uint256),(uint256[2],uint256[2])) _signer, (uint256,uint256) _signature) returns()
 func (_DASigners *DASignersTransactorSession) RegisterSigner(_signer IDASignersSignerDetail, _signature BN254G1Point) (*types.Transaction, error) {
 	return _DASigners.Contract.RegisterSigner(&_DASigners.TransactOpts, _signer, _signature)
+}
+
+// UpdateSocket is a paid mutator transaction binding the contract method 0x0cf4b767.
+//
+// Solidity: function updateSocket(string socket) returns()
+func (_DASigners *DASignersTransactor) UpdateSocket(opts *bind.TransactOpts, socket string) (*types.Transaction, error) {
+	return _DASigners.contract.Transact(opts, "updateSocket", socket)
+}
+
+// UpdateSocket is a paid mutator transaction binding the contract method 0x0cf4b767.
+//
+// Solidity: function updateSocket(string socket) returns()
+func (_DASigners *DASignersSession) UpdateSocket(socket string) (*types.Transaction, error) {
+	return _DASigners.Contract.UpdateSocket(&_DASigners.TransactOpts, socket)
+}
+
+// UpdateSocket is a paid mutator transaction binding the contract method 0x0cf4b767.
+//
+// Solidity: function updateSocket(string socket) returns()
+func (_DASigners *DASignersTransactorSession) UpdateSocket(socket string) (*types.Transaction, error) {
+	return _DASigners.Contract.UpdateSocket(&_DASigners.TransactOpts, socket)
 }
 
 // DASignersNewSignerIterator is returned from FilterNewSigner and is used to iterate over the raw logs and unpacked data for NewSigner events raised by the DASigners contract.
