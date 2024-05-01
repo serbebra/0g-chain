@@ -20,3 +20,23 @@ func (k Keeper) EpochNumber(
 	}
 	return &types.QueryEpochNumberResponse{EpochNumber: epochNumber}, nil
 }
+
+func (k Keeper) EpochSignerSet(c context.Context, request *types.QueryEpochSignerSetRequest) (*types.QueryEpochSignerSetResponse, error) {
+	ctx := sdk.UnwrapSDKContext(c)
+	epochSignerSet := make([]*types.Signer, 0)
+	signers, found := k.GetEpochSignerSet(ctx, request.EpochNumber)
+	if !found {
+		return &types.QueryEpochSignerSetResponse{Signers: epochSignerSet}, nil
+	}
+	for _, account := range signers.Signers {
+		signer, found, err := k.GetSigner(ctx, account)
+		if err != nil {
+			return nil, err
+		}
+		if !found {
+			return nil, types.ErrSignerNotFound
+		}
+		epochSignerSet = append(epochSignerSet, &signer)
+	}
+	return &types.QueryEpochSignerSetResponse{Signers: epochSignerSet}, nil
+}

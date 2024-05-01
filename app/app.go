@@ -474,7 +474,7 @@ func NewApp(
 
 	evmBankKeeper := evmutilkeeper.NewEvmBankKeeper(app.evmutilKeeper, app.bankKeeper, app.accountKeeper)
 	// dasigners keeper
-	app.dasignersKeeper = dasignerskeeper.NewKeeper(keys[dasignerstypes.StoreKey], appCodec)
+	app.dasignersKeeper = dasignerskeeper.NewKeeper(keys[dasignerstypes.StoreKey], appCodec, app.stakingKeeper)
 	// precopmiles
 	precompiles := make(map[common.Address]vm.PrecompiledContract)
 	daSignersPrecompile, err := dasignersprecompile.NewDASignersPrecompile(app.dasignersKeeper)
@@ -647,7 +647,7 @@ func NewApp(
 		mint.NewAppModule(appCodec, app.mintKeeper, app.accountKeeper, nil, mintSubspace),
 		council.NewAppModule(app.CouncilKeeper, app.stakingKeeper),
 		das.NewAppModule(app.DasKeeper),
-		dasigners.NewAppModule(app.dasignersKeeper),
+		dasigners.NewAppModule(app.dasignersKeeper, app.stakingKeeper),
 	)
 
 	// Warning: Some begin blockers must run before others. Ensure the dependencies are understood before modifying this list.

@@ -32,3 +32,11 @@ func GetSignerKeyFromAccount(account string) ([]byte, error) {
 func GetEpochSignerSetKeyFromEpoch(epoch uint64) []byte {
 	return sdk.Uint64ToBigEndian(epoch)
 }
+
+func GetEpochRegistrationKeyPrefix(epoch uint64) []byte {
+	return append(RegistrationKeyPrefix, sdk.Uint64ToBigEndian(epoch)...)
+}
+
+func GetRegistrationKey(account string) ([]byte, error) {
+	return hex.DecodeString(account)
+}

@@ -31,6 +31,9 @@ func init() {
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	registry.RegisterImplementations(
 		(*sdk.Msg)(nil),
+		&MsgRegisterSigner{},
+		&MsgUpdateSocket{},
+		&MsgRegisterNextEpoch{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)

@@ -1,7 +1,7 @@
 package keeper
 
 import (
-	"fmt"
+	"encoding/hex"
 
 	"github.com/cometbft/cometbft/libs/log"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -13,18 +13,21 @@ import (
 )
 
 type Keeper struct {
-	storeKey storetypes.StoreKey
-	cdc      codec.BinaryCodec
+	storeKey      storetypes.StoreKey
+	cdc           codec.BinaryCodec
+	stakingKeeper types.StakingKeeper
 }
 
 // NewKeeper creates a new das Keeper instance
 func NewKeeper(
 	storeKey storetypes.StoreKey,
 	cdc codec.BinaryCodec,
+	stakingKeeper types.StakingKeeper,
 ) Keeper {
 	return Keeper{
-		storeKey: storeKey,
-		cdc:      cdc,
+		storeKey:      storeKey,
+		cdc:           cdc,
+		stakingKeeper: stakingKeeper,
 	}
 }
 
@@ -51,7 +54,7 @@ func (k Keeper) GetEpochNumber(ctx sdk.Context) (uint64, error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.EpochNumberKey)
 	if bz == nil {
-		return 0, fmt.Errorf("epoch number is not set in gensis")
+		return 0, types.ErrEpochNumberNotSet
 	}
 	return sdk.BigEndianToUint64(bz), nil
 }
@@ -123,4 +126,46 @@ func (k Keeper) SetEpochSignerSet(ctx sdk.Context, epoch uint64, signers types.E
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.EpochSignerSetKeyPrefix)
 	bz := k.cdc.MustMarshal(&signers)
 	store.Set(types.GetEpochSignerSetKeyFromEpoch(epoch), bz)
+}
+
+func (k Keeper) GetRegistration(ctx sdk.Context, epoch uint64, account string) ([]byte, bool, error) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.GetEpochRegistrationKeyPrefix(epoch))
+	key, err := types.GetRegistrationKey(account)
+	if err != nil {
+		return nil, false, err
+	}
+	signature := store.Get(key)
+	if signature == nil {
+		return nil, false, nil
+	}
+	return signature, true, nil
+}
+
+// iterate through the registrations set and perform the provided function
+func (k Keeper) IterateRegistrations(ctx sdk.Context, epoch uint64, fn func(account string, signature []byte) (stop bool)) {
+	store := ctx.KVStore(k.storeKey)
+
+	iterator := sdk.KVStorePrefixIterator(store, types.GetEpochRegistrationKeyPrefix(epoch))
+	defer iterator.Close()
+
+	i := int64(0)
+
+	for ; iterator.Valid(); iterator.Next() {
+		stop := fn(hex.EncodeToString(iterator.Key()), iterator.Value())
+
+		if stop {
+			break
+		}
+		i++
+	}
+}
+
+func (k Keeper) SetRegistration(ctx sdk.Context, epoch uint64, account string, signature []byte) error {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.GetEpochRegistrationKeyPrefix(epoch))
+	key, err := types.GetRegistrationKey(account)
+	if err != nil {
+		return err
+	}
+	store.Set(key, signature)
+	return nil
 }

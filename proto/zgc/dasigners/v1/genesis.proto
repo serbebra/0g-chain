@@ -11,6 +11,9 @@ option go_package = "github.com/0glabs/0g-chain/x/dasigners/v1/types";
 
 message Params {
   uint64 quorum_size = 1;
+  string tokens_per_vote = 2;
+  uint64 max_votes = 3;
+  uint64 epoch_blocks = 4;
 }
 
 // GenesisState defines the dasigners module's genesis state.

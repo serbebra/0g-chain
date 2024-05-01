@@ -1,4 +1,4 @@
-package bn254
+package bn254util
 
 import (
 	"math/big"
@@ -6,13 +6,16 @@ import (
 	"github.com/consensys/gnark-crypto/ecc/bn254"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fp"
 	"github.com/consensys/gnark-crypto/ecc/bn254/fr"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 )
 
 const (
-	G1PubkeySize = 32 * 2
-	G2PubkeySize = 32 * 2 * 2
+	G1PointSize = 32 * 2
+	G2PointSize = 32 * 2 * 2
+)
+
+var (
+	FR_MODULUS, _ = new(big.Int).SetString("21888242871839275222246405745257275088548364400416034343698204186575808495617", 10)
 )
 
 func VerifySig(sig *bn254.G1Affine, pubkey *bn254.G2Affine, msgBytes [32]byte) (bool, error) {
@@ -148,19 +151,16 @@ func DeserializeG2(b []byte) *bn254.G2Affine {
 	return p
 }
 
-func PubkeyRegistrationHash(operatorAddress common.Address, compendiumAddress common.Address, chainId *big.Int) *bn254.G1Affine {
+func Gamma(hash *bn254.G1Affine, signature *bn254.G1Affine, pkG1 *bn254.G1Affine, pkG2 *bn254.G2Affine) *big.Int {
 	toHash := make([]byte, 0)
-	toHash = append(toHash, operatorAddress.Bytes()...)
-	toHash = append(toHash, compendiumAddress.Bytes()...)
-	// make sure chainId is 32 bytes
-	toHash = append(toHash, common.LeftPadBytes(chainId.Bytes(), 32)...)
-	toHash = append(toHash, []byte("EigenLayer_BN254_Pubkey_Registration")...)
+	toHash = append(toHash, SerializeG1(hash)...)
+	toHash = append(toHash, SerializeG1(signature)...)
+	toHash = append(toHash, SerializeG1(pkG1)...)
+	toHash = append(toHash, SerializeG2(pkG2)...)
 
 	msgHash := crypto.Keccak256(toHash)
-	// convert to [32]byte
-	var msgHash32 [32]byte
-	copy(msgHash32[:], msgHash)
-
-	// hash to G1
-	return MapToCurve(msgHash32)
+	gamma := new(big.Int)
+	gamma.SetBytes(msgHash)
+	gamma.Mod(gamma, FR_MODULUS)
+	return gamma
 }
