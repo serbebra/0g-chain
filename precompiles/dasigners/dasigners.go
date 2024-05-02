@@ -2,7 +2,6 @@ package dasigners
 
 import (
 	"fmt"
-	"math/big"
 	"strings"
 
 	precopmiles_common "github.com/0glabs/0g-chain/precompiles/common"
@@ -17,7 +16,13 @@ const (
 	PrecompileAddress        = "0x0000000000000000000000000000000000001000"
 	RequiredGasBasic  uint64 = 100
 
-	DASignersFunctionEpochNumber = "epochNumber"
+	DASignersFunctionEpochNumber       = "epochNumber"
+	DASignersFunctionGetSigner         = "getSigner"
+	DASignersFunctionGetSigners        = "getSigners"
+	DASignersFunctionUpdateSocket      = "updateSocket"
+	DASignersFunctionRegisterNextEpoch = "registerNextEpoch"
+	DASignersFunctionRegisterSigner    = "registerSigner"
+	DASignersFunctionGetAggPkG1        = "getAggPkG1"
 )
 
 var _ vm.PrecompiledContract = &DASignersPrecompile{}
@@ -68,21 +73,36 @@ func (d *DASignersPrecompile) Run(evm *vm.EVM, contract *vm.Contract, readonly b
 		return nil, fmt.Errorf(precopmiles_common.ErrGetStateDB)
 	}
 	ctx := stateDB.GetContext()
+	initialGas := ctx.GasMeter().GasConsumed()
 
-	_ = ctx
-	_ = args
-
-	var res []byte
+	var bz []byte
 	switch method.Name {
+	// queries
 	case DASignersFunctionEpochNumber:
-		epochNumber, err := d.dasignersKeeper.GetEpochNumber(ctx)
-		if err != nil {
-			return nil, err
-		}
-		res, err = method.Outputs.Pack(big.NewInt(int64(epochNumber)))
-		if err != nil {
-			return nil, err
-		}
+		bz, err = d.EpochNumber(ctx, evm, method, args)
+	case DASignersFunctionGetSigner:
+		bz, err = d.GetSigner(ctx, evm, method, args)
+	case DASignersFunctionGetSigners:
+		bz, err = d.GetSigners(ctx, evm, method, args)
+	case DASignersFunctionGetAggPkG1:
+		bz, err = d.GetAggPkG1(ctx, evm, method, args)
+	// txs
+	case DASignersFunctionRegisterSigner:
+		bz, err = d.RegisterSigner(ctx, evm, method, args)
+	case DASignersFunctionRegisterNextEpoch:
+		bz, err = d.RegisterNextEpoch(ctx, evm, method, args)
+	case DASignersFunctionUpdateSocket:
+
 	}
-	return res, nil
+
+	if err != nil {
+		return nil, err
+	}
+
+	cost := ctx.GasMeter().GasConsumed() - initialGas
+
+	if !contract.UseGas(cost) {
+		return nil, vm.ErrOutOfGas
+	}
+	return bz, nil
 }

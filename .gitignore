@@ -43,3 +43,6 @@ go.work
 go.work.sum
 .build/0gchaind
 .build/da
+
+# runtime
+run
