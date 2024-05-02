@@ -87,6 +87,16 @@ func (k Keeper) SetSigner(ctx sdk.Context, signer types.Signer) error {
 		return err
 	}
 	store.Set(key, bz)
+
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(
+			types.EventTypeUpdateSigner,
+			sdk.NewAttribute(types.AttributeKeySigner, signer.Account),
+			sdk.NewAttribute(types.AttributeKeySocket, signer.Socket),
+			sdk.NewAttribute(types.AttributeKeyPublicKeyG1, hex.EncodeToString(signer.PubkeyG1)),
+			sdk.NewAttribute(types.AttributeKeyPublicKeyG2, hex.EncodeToString(signer.PubkeyG2)),
+		),
+	)
 	return nil
 }
 
