@@ -45,7 +45,7 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 }
 
 func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.EpochSignerSetKeyPrefix)
+	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&params)
 	store.Set(types.ParamsKey, bz)
 }

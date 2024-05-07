@@ -23,6 +23,7 @@ func InitGenesis(ctx sdk.Context, keeper keeper.Keeper, gs types.GenesisState) {
 	for epoch, signers := range gs.SignersByEpoch {
 		keeper.SetEpochSignerSet(ctx, uint64(epoch), *signers)
 	}
+	keeper.SetParams(ctx, gs.Params)
 }
 
 // ExportGenesis returns a GenesisState for a given context and keeper.

@@ -326,6 +326,7 @@ func NewApp(
 		bep3types.StoreKey,
 		pricefeedtypes.StoreKey,
 		committeetypes.StoreKey,
+		dasignerstypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey, evmtypes.TransientKey, feemarkettypes.TransientKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
