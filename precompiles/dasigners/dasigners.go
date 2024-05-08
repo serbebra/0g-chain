@@ -88,11 +88,11 @@ func (d *DASignersPrecompile) Run(evm *vm.EVM, contract *vm.Contract, readonly b
 		bz, err = d.GetAggPkG1(ctx, evm, method, args)
 	// txs
 	case DASignersFunctionRegisterSigner:
-		bz, err = d.RegisterSigner(ctx, evm, method, args)
+		bz, err = d.RegisterSigner(ctx, evm, stateDB, method, args)
 	case DASignersFunctionRegisterNextEpoch:
-		bz, err = d.RegisterNextEpoch(ctx, evm, method, args)
+		bz, err = d.RegisterNextEpoch(ctx, evm, stateDB, method, args)
 	case DASignersFunctionUpdateSocket:
-
+		bz, err = d.UpdateSocket(ctx, evm, stateDB, method, args)
 	}
 
 	if err != nil {
