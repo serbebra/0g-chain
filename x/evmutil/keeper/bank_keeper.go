@@ -16,6 +16,14 @@ import (
 // ConversionMultiplier is the conversion multiplier between neuron and a0gi
 var ConversionMultiplier = sdkmath.NewInt(chaincfg.ConversionMultiplier)
 
+const (
+	// EvmDenom is the gas denom used by the evm
+	EvmDenom = "neuron"
+
+	// CosmosDenom is the gas denom used by the 0g-chain app
+	CosmosDenom = "ua0gi"
+)
+
 var _ evmtypes.BankKeeper = EvmBankKeeper{}
 
 // EvmBankKeeper is a BankKeeper wrapper for the x/evm module to allow the use
@@ -40,15 +48,23 @@ func NewEvmBankKeeper(baseKeeper Keeper, bk types.BankKeeper, ak types.AccountKe
 
 // GetBalance returns the total **spendable** balance of neuron for a given account by address.
 func (k EvmBankKeeper) GetBalance(ctx sdk.Context, addr sdk.AccAddress, denom string) sdk.Coin {
-	if denom != chaincfg.BaseDenom {
-		panic(fmt.Errorf("only evm denom %s is supported by EvmBankKeeper", chaincfg.BaseDenom))
+	if denom != EvmDenom {
+		panic(fmt.Errorf("only evm denom %s is supported by EvmBankKeeper", EvmDenom))
 	}
 
 	spendableCoins := k.bk.SpendableCoins(ctx, addr)
-	a0gi := spendableCoins.AmountOf(chaincfg.DisplayDenom)
-	neuron := k.baseKeeper.GetBalance(ctx, addr)
-	total := a0gi.Mul(ConversionMultiplier).Add(neuron)
-	return sdk.NewCoin(chaincfg.BaseDenom, total)
+	cosmosDenomFromBank := spendableCoins.AmountOf(CosmosDenom)
+	evmDenomFromBank := spendableCoins.AmountOf(EvmDenom)
+	evmDenomFromEvmBank := k.baseKeeper.GetBalance(ctx, addr)
+
+	var total sdkmath.Int
+
+	if cosmosDenomFromBank.IsPositive() {
+		total = cosmosDenomFromBank.Mul(ConversionMultiplier).Add(evmDenomFromBank).Add(evmDenomFromEvmBank)
+	} else {
+		total = evmDenomFromBank.Add(evmDenomFromEvmBank)
+	}
+	return sdk.NewCoin(EvmDenom, total)
 }
 
 // SendCoins transfers neuron coins from a AccAddress to an AccAddress.
